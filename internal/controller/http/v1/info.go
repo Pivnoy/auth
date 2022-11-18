@@ -25,6 +25,7 @@ func (i *infoRoutes) info(c *gin.Context) {
 	auth := c.GetHeader("Authorization")
 	if auth == "" {
 		errorResponse(c, http.StatusUnauthorized, "error in header format")
+		return
 	}
 	headerParts := strings.Split(auth, " ")
 	if len(headerParts) != 2 {

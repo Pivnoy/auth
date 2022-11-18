@@ -1,9 +1,9 @@
 package entity
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import "github.com/google/uuid"
 
 type User struct {
-	ObjectID primitive.ObjectID `json:"_id"`
-	Email    string             `json:"email"`
-	Password string             `json:"password"`
+	ID       uuid.UUID `json:"id"`
+	Email    string    `json:"email"`
+	Password string    `json:"password"`
 }

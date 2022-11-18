@@ -1,21 +1,21 @@
 package config
 
 import (
-	"fmt"
 	"github.com/caarlos0/env/v6"
 )
 
 type Config struct {
-	Port      string `env:"PORT" envDefault:"9000"`
-	JwtSecret string `env:"SECRET" envDefault:"LEXA_KUTSENKA"`
-	LogLevel  string `env:"LOG_LEVEL" envDefault:"error"`
-	MongoURL  string `env:"MONGO_RUL" envDefault:"mongodb://mongo:mongo@mongodb:27017"`
-	MongoDB   string `env:"MONGO_DB" envDefault:"users"`
+	Port        string `env:"APP_PORT" envDefault:"9000"`
+	JwtSecret   string `env:"SECRET" envDefault:"LEXA_KUTSENKA"`
+	LogLevel    string `env:"LOG_LEVEL" envDefault:"error"`
+	PostgresUrl string `env:"POSTGRES_URL" envDefault:"postgresql://postgres:postgres@psql:5432/postgres"`
 }
 
 func NewConfig() (*Config, error) {
 	cfg := &Config{}
-	env.Parse(cfg)
-	fmt.Println(cfg)
+	err := env.Parse(cfg)
+	if err != nil {
+		return nil, err
+	}
 	return cfg, nil
 }
