@@ -20,7 +20,7 @@ func NewRegisterUseCase(u UserContract) *RegisterUseCase {
 }
 
 func (r *RegisterUseCase) CreateNewUser(ctx context.Context, email string, password string) error {
-	if len(email) <= 4 || len(password) <= 4 {
+	if len(email) < 4 || len(password) < 4 {
 		return fmt.Errorf("invalid format of username or password")
 	}
 	exists, err := r.u.CheckExistenceByEmail(ctx, email)

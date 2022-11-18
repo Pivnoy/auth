@@ -7,11 +7,13 @@ import (
 	"auth_reg/internal/usecase/repo"
 	"auth_reg/pkg/httpserver"
 	"auth_reg/pkg/mongodb"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func Run(cfg *config.Config) {
@@ -27,7 +29,14 @@ func Run(cfg *config.Config) {
 	jc := usecase.NewJwtUseCase(us, cfg.JwtSecret)
 
 	handler := gin.New()
-
+	handler.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"*"},
+		AllowHeaders:     []string{"Access-Control-Allow-Origin", "*"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	v1.NewRouter(handler,
 		us,
 		rg,

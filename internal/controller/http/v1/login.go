@@ -18,24 +18,6 @@ func newLoginRoutes(handler *gin.RouterGroup, u usecase.UserContract, j usecase.
 	handler.POST("/login", lg.login)
 }
 
-//func (l *loginRoutes) login(c *gin.Context) {
-//	auth := c.GetHeader("Authorization")
-//	if auth == "" {
-//		errorResponse(c, http.StatusUnauthorized, "cannot check token")
-//		return
-//	}
-//	headerParts := strings.Split(auth, " ")
-//	if len(headerParts) != 2 {
-//		errorResponse(c, http.StatusUnauthorized, "cannot parse token")
-//		return
-//	}
-//	if headerParts[0] != "Bearer" {
-//		errorResponse(c, http.StatusUnauthorized, "cannot find Bearer")
-//		return
-//	}
-//	token, err := l.j.
-//}
-
 type loginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -47,7 +29,7 @@ func (l *loginRoutes) login(c *gin.Context) {
 		errorResponse(c, http.StatusBadRequest, "cannot parse user creds")
 		return
 	}
-	if len(lg.Email) <= 4 || len(lg.Password) <= 4 {
+	if len(lg.Email) < 4 || len(lg.Password) < 4 {
 		errorResponse(c, http.StatusBadRequest, "error format of login")
 		return
 	}
