@@ -6,7 +6,7 @@ import (
 	"auth_reg/internal/usecase"
 	"auth_reg/internal/usecase/repo"
 	"auth_reg/pkg/httpserver"
-	"auth_reg/pkg/mongodb"
+	"auth_reg/pkg/postgres"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -18,12 +18,13 @@ import (
 
 func Run(cfg *config.Config) {
 
-	mng, err := mongodb.NewMongo(cfg)
+	pg, err := postgres.New(cfg)
+
 	if err != nil {
-		log.Fatal("Cannot connect to Mongo")
+		log.Fatal("Error in creating postgres instance")
 	}
 
-	usRepo := repo.NewUserRepo(mng, "accounts")
+	usRepo := repo.NewUserRepo(pg)
 	us := usecase.NewUserUseCase(usRepo)
 	rg := usecase.NewRegisterUseCase(us)
 	jc := usecase.NewJwtUseCase(us, cfg.JwtSecret)

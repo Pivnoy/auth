@@ -1,15 +1,17 @@
 version: '3.7'
 
 services:
-  mongodb:
-    image: mongo
-    container_name: mongodb
+  psql:
+    image: postgres
+    container_name: 'psql'
     volumes:
-      - ./migrations/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./migrations/postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql:ro
+    ports:
+      - "5432:5432"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=mongo
-      - MONGO_INITDB_ROOT_PASSWORD=mongo
-      - MONGO_INITDB_DATABASE=users
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
 
   auth:
     container_name: 'auth'
