@@ -8,7 +8,7 @@ type Config struct {
 	Port        string `env:"APP_PORT" envDefault:"9000"`
 	JwtSecret   string `env:"SECRET" envDefault:"LEXA_KUTSENKA"`
 	LogLevel    string `env:"LOG_LEVEL" envDefault:"error"`
-	PostgresUrl string `env:"POSTGRES_URL" envDefault:"postgresql://postgres:postgres@psql:5432/postgres"`
+	PostgresUrl string `env:"POSTGRES_URL" envDefault:"postgresql://postgres1488:postgres1488@psql:5432/hachi"`
 }
 
 func NewConfig() (*Config, error) {
