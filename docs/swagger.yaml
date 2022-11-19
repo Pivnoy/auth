@@ -1,0 +1,56 @@
+basePath: /
+definitions:
+  v1.errResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  v1.registerRequestDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      secretQuestionAnswer:
+        type: string
+      secretQuestionID:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: API for auth microservice
+  version: "1.0"
+paths:
+  /v1/register/:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      operationId: register-user
+      parameters:
+      - description: Enter info user
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.registerRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: Register
+      tags:
+      - register
+swagger: "2.0"

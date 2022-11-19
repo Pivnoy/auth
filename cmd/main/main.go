@@ -6,6 +6,12 @@ import (
 	"log"
 )
 
+// @tittle auth
+// @version 1.0
+// @description API for auth microservice
+
+// @host localhost:9000
+// @BasePath /
 func main() {
 	cfg, err := config.NewConfig()
 	if err != nil {
