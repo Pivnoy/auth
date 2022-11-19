@@ -25,6 +25,6 @@ type (
 	}
 
 	RegisterContract interface {
-		CreateNewUser(context.Context, string, string) error
+		CreateNewUser(context.Context, entity.User) error
 	}
 )

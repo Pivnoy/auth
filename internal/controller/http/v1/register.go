@@ -17,19 +17,23 @@ func newRegisterRoutes(handler *gin.RouterGroup, rg usecase.RegisterContract, j 
 	handler.POST("/register", r.register)
 }
 
-type registerRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func (r *registerRoutes) register(c *gin.Context) {
-	var req registerRequest
+	var req registerRequestDTO
 	if err := c.ShouldBindJSON(&req); err != nil {
 		errorResponse(c, http.StatusBadRequest, "cannot parse request credentials")
 		return
 	}
-
-	err := r.rg.CreateNewUser(c.Request.Context(), req.Email, req.Password)
+	user, err := userRegisterToEntity(req)
+	if err != nil {
+		errorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	err = validateNewUser(user)
+	if err != nil {
+		errorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	err = r.rg.CreateNewUser(c.Request.Context(), user)
 	if err != nil {
 		errorResponse(c, http.StatusUnauthorized, "error in format user creds")
 		return
