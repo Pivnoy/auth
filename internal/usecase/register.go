@@ -31,6 +31,8 @@ func (r *RegisterUseCase) CreateNewUser(ctx context.Context, user entity.User) e
 	if err != nil {
 		return fmt.Errorf("error in hashing psswrd: %v", err)
 	}
+	secretAnswerHash, err := bcrypt.GenerateFromPassword([]byte(user.SecretQuestionAnswer), 14)
 	user.Password = string(passwordHash)
+	user.SecretQuestionAnswer = string(secretAnswerHash)
 	return r.u.StoreUser(ctx, user)
 }
