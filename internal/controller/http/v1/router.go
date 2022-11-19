@@ -11,7 +11,8 @@ import (
 func NewRouter(handler *gin.Engine,
 	u usecase.UserContract,
 	r usecase.RegisterContract,
-	j usecase.JwtContract) {
+	j usecase.JwtContract,
+	s usecase.SecretQuestionContract) {
 
 	handler.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	h := handler.Group("/v1")
@@ -21,5 +22,6 @@ func NewRouter(handler *gin.Engine,
 		newLoginRoutes(h, u, j)
 		newInfoRoutes(h, j)
 		newLogoutRoutes(h, j)
+		newSecretQuestionRoutes(h, s)
 	}
 }

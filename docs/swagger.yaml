@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  entity.SecretQuestion:
+    properties:
+      id:
+        type: string
+      question:
+        type: string
+    type: object
   v1.errResponse:
     properties:
       error:
@@ -18,13 +25,40 @@ definitions:
       secretQuestionID:
         type: string
     type: object
+  v1.secretQuestionsResponseDTO:
+    properties:
+      questions:
+        items:
+          $ref: '#/definitions/entity.SecretQuestion'
+        type: array
+    type: object
 host: localhost:9000
 info:
   contact: {}
   description: API for auth microservice
   version: "1.0"
 paths:
-  /v1/register/:
+  /v1/questions:
+    get:
+      consumes:
+      - application/json
+      description: Get all secret questions
+      operationId: get-question
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.secretQuestionsResponseDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: GetQuestions
+      tags:
+      - questions
+  /v1/register:
     post:
       consumes:
       - application/json

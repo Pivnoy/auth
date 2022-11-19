@@ -16,7 +16,37 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/register/": {
+        "/v1/questions": {
+            "get": {
+                "description": "Get all secret questions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "questions"
+                ],
+                "summary": "GetQuestions",
+                "operationId": "get-question",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/v1.secretQuestionsResponseDTO"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/register": {
             "post": {
                 "description": "Register new user",
                 "consumes": [
@@ -62,6 +92,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "entity.SecretQuestion": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "question": {
+                    "type": "string"
+                }
+            }
+        },
         "v1.errResponse": {
             "type": "object",
             "properties": {
@@ -87,6 +128,17 @@ const docTemplate = `{
                 },
                 "secretQuestionID": {
                     "type": "string"
+                }
+            }
+        },
+        "v1.secretQuestionsResponseDTO": {
+            "type": "object",
+            "properties": {
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.SecretQuestion"
+                    }
                 }
             }
         }

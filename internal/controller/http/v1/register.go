@@ -27,7 +27,7 @@ func newRegisterRoutes(handler *gin.RouterGroup, rg usecase.RegisterContract, j 
 // @Success 200 {object} nil
 // @Failure 400 {object} errResponse
 // @Failure 401 {object} errResponse
-// @Router /v1/register/ [post]
+// @Router /v1/register [post]
 func (r *registerRoutes) register(c *gin.Context) {
 	var req registerRequestDTO
 	if err := c.ShouldBindJSON(&req); err != nil {

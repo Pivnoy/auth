@@ -27,4 +27,12 @@ type (
 	RegisterContract interface {
 		CreateNewUser(context.Context, entity.User) error
 	}
+
+	SecretQuestionContract interface {
+		GetAllQuestions(context.Context) ([]entity.SecretQuestion, error)
+	}
+
+	SecretQuestionRp interface {
+		GetAllQuestions(context.Context) ([]entity.SecretQuestion, error)
+	}
 )
