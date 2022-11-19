@@ -19,6 +19,7 @@ func newLogoutRoutes(handler *gin.RouterGroup, j usecase.JwtContract) {
 
 // @Summary Logout
 // @Tags auth
+// @Security ApiKeyAuth
 // @Description logout
 // @ID logout-user
 // @Accept json
@@ -38,7 +39,7 @@ func (l *logoutRoutes) logout(c *gin.Context) {
 		errorResponse(c, http.StatusUnauthorized, "cannot parse token")
 		return
 	}
-	if headerParts[0] != "Bearer" {
+	if headerParts[0] != "Bearer:" {
 		errorResponse(c, http.StatusUnauthorized, "cannot find Bearer")
 		return
 	}

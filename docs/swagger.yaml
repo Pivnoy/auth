@@ -95,6 +95,8 @@ paths:
           description: Unauthorized
           schema:
             $ref: '#/definitions/v1.errResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Logout
       tags:
       - auth
@@ -147,4 +149,9 @@ paths:
       summary: Register
       tags:
       - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
