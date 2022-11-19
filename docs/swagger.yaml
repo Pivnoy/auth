@@ -1,0 +1,157 @@
+basePath: /
+definitions:
+  v1.errResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  v1.loginRequestDTO:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+      type:
+        type: string
+    type: object
+  v1.registerRequestDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      secretQuestionAnswer:
+        type: string
+      secretQuestionID:
+        type: string
+    type: object
+  v1.secretQuestionResponseDTO:
+    properties:
+      label:
+        type: string
+      value:
+        type: string
+    type: object
+  v1.secretQuestionsResponseDTO:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/v1.secretQuestionResponseDTO'
+        type: array
+    type: object
+host: localhost:9000
+info:
+  contact: {}
+  description: API for auth microservice
+  version: "1.0"
+paths:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login-user
+      parameters:
+      - description: Enter login, password, type (
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.loginRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: Login
+      tags:
+      - auth
+  /v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: logout
+      operationId: logout-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /v1/auth/questions:
+    get:
+      consumes:
+      - application/json
+      description: Get all secret questions for future password reset
+      operationId: get-question
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.secretQuestionsResponseDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: GetQuestions
+      tags:
+      - auth
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      operationId: register-user
+      parameters:
+      - description: Enter info user
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.registerRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: Register
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

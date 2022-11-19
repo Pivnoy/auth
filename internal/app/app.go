@@ -25,6 +25,8 @@ func Run(cfg *config.Config) {
 	}
 
 	usRepo := repo.NewUserRepo(pg)
+	sqRepo := repo.NewSecretQuestionRepo(pg)
+	sq := usecase.NewSecretQuestionUseCase(sqRepo)
 	us := usecase.NewUserUseCase(usRepo)
 	rg := usecase.NewRegisterUseCase(us)
 	jc := usecase.NewJwtUseCase(us, cfg.JwtSecret)
@@ -41,7 +43,8 @@ func Run(cfg *config.Config) {
 	v1.NewRouter(handler,
 		us,
 		rg,
-		jc)
+		jc,
+		sq)
 
 	serv := httpserver.New(handler, httpserver.Port(cfg.Port))
 	interruption := make(chan os.Signal, 1)

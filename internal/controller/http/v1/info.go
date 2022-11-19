@@ -14,7 +14,7 @@ type infoRoutes struct {
 func newInfoRoutes(handler *gin.RouterGroup, j usecase.JwtContract) {
 	i := infoRoutes{j: j}
 
-	handler.GET("/info", i.info)
+	handler.GET("/auth/info", i.info)
 }
 
 type infoResponse struct {

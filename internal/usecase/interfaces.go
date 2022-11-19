@@ -9,22 +9,33 @@ type (
 	UserRp interface {
 		StoreUser(context.Context, entity.User) error
 		GetUserByEmail(context.Context, string) (entity.User, error)
+		GetUserByPhone(context.Context, string) (entity.User, error)
 		CheckExistenceByEmail(context.Context, string) (bool, error)
 	}
 
 	UserContract interface {
 		StoreUser(context.Context, entity.User) error
 		GetUserByEmail(context.Context, string) (entity.User, error)
+		GetUserByPhone(context.Context, string) (entity.User, error)
 		CheckExistenceByEmail(context.Context, string) (bool, error)
 	}
 
 	JwtContract interface {
-		CompareUserPassword(context.Context, entity.User) error
+		CompareUserPasswordByEmail(context.Context, entity.User) error
+		CompareUserPasswordByPhone(context.Context, entity.User) error
 		GenerateToken(string) (string, error)
 		CheckToken(string) (string, error)
 	}
 
 	RegisterContract interface {
-		CreateNewUser(context.Context, string, string) error
+		CreateNewUser(context.Context, entity.User) error
+	}
+
+	SecretQuestionContract interface {
+		GetAllQuestions(context.Context) ([]entity.SecretQuestion, error)
+	}
+
+	SecretQuestionRp interface {
+		GetAllQuestions(context.Context) ([]entity.SecretQuestion, error)
 	}
 )

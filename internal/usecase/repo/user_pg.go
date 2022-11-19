@@ -20,9 +20,9 @@ func NewUserRepo(pg *postgres.Postgres) *UserRepo {
 }
 
 func (u *UserRepo) StoreUser(ctx context.Context, user entity.User) error {
-	query := `insert into "user" (id, email, password) values ($1, $2, $3) returning id`
+	query := `insert into "user" (id, email, phone, password, status, secret_question_id, secret_question_answer) values ($1, $2, $3, $4, $5, $6, $7) returning id`
 
-	rows, err := u.pg.Pool.Query(ctx, query, uuid.New(), user.Email, user.Password)
+	rows, err := u.pg.Pool.Query(ctx, query, uuid.New(), user.Email, user.Phone, user.Password, "pending", user.SecretQuestionID, user.SecretQuestionAnswer)
 	if err != nil {
 		return fmt.Errorf("cannot execute query: %w", err)
 	}
@@ -46,10 +46,40 @@ func (u *UserRepo) GetUserByEmail(ctx context.Context, email string) (entity.Use
 		err = rows.Scan(
 			&user.ID,
 			&user.Email,
+			&user.Phone,
 			&user.Password,
+			&user.Status,
+			&user.SecretQuestionID,
+			&user.SecretQuestionAnswer,
 		)
 		if err != nil {
 			return entity.User{}, fmt.Errorf("error parsing user by email: %w", err)
+		}
+	}
+	return user, nil
+}
+
+func (u *UserRepo) GetUserByPhone(ctx context.Context, phone string) (entity.User, error) {
+	query := `select * from "user" where phone=$1`
+
+	rows, err := u.pg.Pool.Query(ctx, query, phone)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("cannot execute query: %w", err)
+	}
+	defer rows.Close()
+	var user entity.User
+	if rows.Next() {
+		err = rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Phone,
+			&user.Password,
+			&user.Status,
+			&user.SecretQuestionID,
+			&user.SecretQuestionAnswer,
+		)
+		if err != nil {
+			return entity.User{}, fmt.Errorf("error parsing user by phone: %w", err)
 		}
 	}
 	return user, nil
