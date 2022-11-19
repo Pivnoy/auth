@@ -26,3 +26,7 @@ func (u *UserUseCase) GetUserByEmail(ctx context.Context, email string) (entity.
 func (u *UserUseCase) CheckExistenceByEmail(ctx context.Context, email string) (bool, error) {
 	return u.repo.CheckExistenceByEmail(ctx, email)
 }
+
+func (u *UserUseCase) GetUserByPhone(ctx context.Context, phone string) (entity.User, error) {
+	return u.repo.GetUserByPhone(ctx, phone)
+}

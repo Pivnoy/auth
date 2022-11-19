@@ -13,3 +13,9 @@ type registerRequestDTO struct {
 type secretQuestionsResponseDTO struct {
 	Questions []entity.SecretQuestion `json:"questions"`
 }
+
+type loginRequestDTO struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+	Type     string `json:"type"`
+}

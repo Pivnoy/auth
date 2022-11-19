@@ -59,6 +59,32 @@ func (u *UserRepo) GetUserByEmail(ctx context.Context, email string) (entity.Use
 	return user, nil
 }
 
+func (u *UserRepo) GetUserByPhone(ctx context.Context, phone string) (entity.User, error) {
+	query := `select * from "user" where phone=$1`
+
+	rows, err := u.pg.Pool.Query(ctx, query, phone)
+	if err != nil {
+		return entity.User{}, fmt.Errorf("cannot execute query: %w", err)
+	}
+	defer rows.Close()
+	var user entity.User
+	if rows.Next() {
+		err = rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Phone,
+			&user.Password,
+			&user.Status,
+			&user.SecretQuestionID,
+			&user.SecretQuestionAnswer,
+		)
+		if err != nil {
+			return entity.User{}, fmt.Errorf("error parsing user by phone: %w", err)
+		}
+	}
+	return user, nil
+}
+
 func (u *UserRepo) CheckExistenceByEmail(ctx context.Context, email string) (bool, error) {
 	query := `select exists (select * from "user" where email=$1)`
 

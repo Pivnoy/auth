@@ -18,30 +18,42 @@ func newLoginRoutes(handler *gin.RouterGroup, u usecase.UserContract, j usecase.
 	handler.POST("/login", lg.login)
 }
 
-type loginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func (l *loginRoutes) login(c *gin.Context) {
-	var lg loginRequest
+	var lg loginRequestDTO
 	if err := c.ShouldBindJSON(&lg); err != nil {
 		errorResponse(c, http.StatusBadRequest, "cannot parse user creds")
 		return
 	}
-	if len(lg.Email) < 4 || len(lg.Password) < 4 {
-		errorResponse(c, http.StatusBadRequest, "error format of login")
-		return
-	}
-	err := l.j.CompareUserPassword(c.Request.Context(), entity.User{
-		Email:    lg.Email,
-		Password: lg.Password,
-	})
+	err := validateLogin(lg)
 	if err != nil {
-		errorResponse(c, http.StatusBadRequest, "wrong password")
+		errorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	token, err := l.j.GenerateToken(lg.Email)
+	if lg.Type == "email" {
+		err = l.j.CompareUserPasswordByEmail(c.Request.Context(), entity.User{
+			Email:    lg.Login,
+			Password: lg.Password,
+		})
+	} else {
+		err = l.j.CompareUserPasswordByPhone(c.Request.Context(), entity.User{
+			Phone:    lg.Login,
+			Password: lg.Password,
+		})
+	}
+	if err != nil {
+		errorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	email := lg.Login
+	if lg.Type == "phone" {
+		user, err := l.u.GetUserByPhone(c.Request.Context(), lg.Login)
+		if err != nil {
+			errorResponse(c, http.StatusInternalServerError, err.Error())
+			return
+		}
+		email = user.Email
+	}
+	token, err := l.j.GenerateToken(email)
 	if err != nil {
 		errorResponse(c, http.StatusBadRequest, "cannot generate token")
 		return

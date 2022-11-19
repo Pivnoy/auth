@@ -21,10 +21,26 @@ func NewJwtUseCase(u UserContract, secret string) *JwtUseCase {
 	}
 }
 
-func (j *JwtUseCase) CompareUserPassword(ctx context.Context, us entity.User) error {
+var _ JwtContract = (*JwtUseCase)(nil)
+
+func (j *JwtUseCase) CompareUserPasswordByEmail(ctx context.Context, us entity.User) error {
 	userFromDb, err := j.u.GetUserByEmail(ctx, us.Email)
-	if err != nil {
-		return fmt.Errorf("cannot get user from db: %w", err)
+	switch {
+	case err != nil:
+		return err
+	case userFromDb == entity.User{}:
+		return fmt.Errorf("user not found")
+	}
+	return bcrypt.CompareHashAndPassword([]byte(userFromDb.Password), []byte(us.Password))
+}
+
+func (j *JwtUseCase) CompareUserPasswordByPhone(ctx context.Context, us entity.User) error {
+	userFromDb, err := j.u.GetUserByPhone(ctx, us.Phone)
+	switch {
+	case err != nil:
+		return err
+	case userFromDb == entity.User{}:
+		return fmt.Errorf("user not found")
 	}
 	return bcrypt.CompareHashAndPassword([]byte(userFromDb.Password), []byte(us.Password))
 }
