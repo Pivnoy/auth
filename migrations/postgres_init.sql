@@ -32,5 +32,5 @@ insert into secret_question (id, question) values ('09e4bde9-4472-4ab0-99fd-04a5
 insert into secret_question (id, question) values ('09e4bde9-4472-4ab0-99fd-04a5cac0a4f2','how to become compilator?');
 insert into secret_question (id, question) values ('09e4bde9-4472-4ab0-99fd-04a5cac0a4f3','how to hard coding?');
 
-insert into "user" (email, phone, password, status, secret_question_id, secret_question_answer) VALUES ('alex@mail.ru', '+79212281488','$2a$14$.lAgcS4UiAiJKiD9kbvlHObowOCdV5mEmreUvG/HewCVlm0heqNN6', 'approved', '09e4bde9-4472-4ab0-99fd-04a5cac0a4f2', 'zhopa'); -- kutsenko
-insert into "user" (email, phone, password, status, secret_question_id, secret_question_answer) VALUES ('roma@mail.ru', '+76969696969','$2a$14$Q1NW5.b/kWan0Y.m1Zjy5uApp9PtuTKDOdmppL.5V8/j/AczOLlHq', 'approved', '09e4bde9-4472-4ab0-99fd-04a5cac0a4f1', 'skaifom'); -- chach
+insert into "user" (email, phone, password, status, secret_question_id, secret_question_answer) VALUES ('alex@mail.ru', '+79212281488','$2a$14$.lAgcS4UiAiJKiD9kbvlHObowOCdV5mEmreUvG/HewCVlm0heqNN6', 'approved', '09e4bde9-4472-4ab0-99fd-04a5cac0a4f2', '$2a$14$ZQrlXRnKomR4QaMU77NnyO4FGnimYZb3pcxY/O9isq5xsKLH3ZNGa'); -- kutsenko
+insert into "user" (email, phone, password, status, secret_question_id, secret_question_answer) VALUES ('roma@mail.ru', '+76969696969','$2a$14$Q1NW5.b/kWan0Y.m1Zjy5uApp9PtuTKDOdmppL.5V8/j/AczOLlHq', 'approved', '09e4bde9-4472-4ab0-99fd-04a5cac0a4f1', '$2a$14$lIDfKVDfsJN3VYKa08Hzyek5i0V1Gb8w2RalasSt291JxmteGxzp6'); -- chach
