@@ -16,9 +16,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/questions": {
-            "get": {
-                "description": "Get all secret questions",
+        "/v1/auth/login": {
+            "post": {
+                "description": "login",
                 "consumes": [
                     "application/json"
                 ],
@@ -26,7 +26,84 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "questions"
+                    "auth"
+                ],
+                "summary": "Login",
+                "operationId": "login-user",
+                "parameters": [
+                    {
+                        "description": "Enter login, password, type (",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.loginRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/logout": {
+            "post": {
+                "description": "logout",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout",
+                "operationId": "logout-user",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/v1.errResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/auth/questions": {
+            "get": {
+                "description": "Get all secret questions for future password reset",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
                 ],
                 "summary": "GetQuestions",
                 "operationId": "get-question",
@@ -46,7 +123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/register": {
+        "/v1/auth/register": {
             "post": {
                 "description": "Register new user",
                 "consumes": [
@@ -56,7 +133,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "register"
+                    "auth"
                 ],
                 "summary": "Register",
                 "operationId": "register-user",
@@ -92,21 +169,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.SecretQuestion": {
+        "v1.errResponse": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "question": {
+                "message": {
                     "type": "string"
                 }
             }
         },
-        "v1.errResponse": {
+        "v1.loginRequestDTO": {
             "type": "object",
             "properties": {
-                "error": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -131,13 +211,24 @@ const docTemplate = `{
                 }
             }
         },
+        "v1.secretQuestionResponseDTO": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "v1.secretQuestionsResponseDTO": {
             "type": "object",
             "properties": {
-                "questions": {
+                "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/entity.SecretQuestion"
+                        "$ref": "#/definitions/v1.secretQuestionResponseDTO"
                     }
                 }
             }

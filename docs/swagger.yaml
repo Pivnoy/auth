@@ -1,15 +1,17 @@
 basePath: /
 definitions:
-  entity.SecretQuestion:
-    properties:
-      id:
-        type: string
-      question:
-        type: string
-    type: object
   v1.errResponse:
     properties:
-      error:
+      message:
+        type: string
+    type: object
+  v1.loginRequestDTO:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+      type:
         type: string
     type: object
   v1.registerRequestDTO:
@@ -25,11 +27,18 @@ definitions:
       secretQuestionID:
         type: string
     type: object
+  v1.secretQuestionResponseDTO:
+    properties:
+      label:
+        type: string
+      value:
+        type: string
+    type: object
   v1.secretQuestionsResponseDTO:
     properties:
-      questions:
+      data:
         items:
-          $ref: '#/definitions/entity.SecretQuestion'
+          $ref: '#/definitions/v1.secretQuestionResponseDTO'
         type: array
     type: object
 host: localhost:9000
@@ -38,11 +47,62 @@ info:
   description: API for auth microservice
   version: "1.0"
 paths:
-  /v1/questions:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login-user
+      parameters:
+      - description: Enter login, password, type (
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/v1.loginRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: Login
+      tags:
+      - auth
+  /v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: logout
+      operationId: logout-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/v1.errResponse'
+      summary: Logout
+      tags:
+      - auth
+  /v1/auth/questions:
     get:
       consumes:
       - application/json
-      description: Get all secret questions
+      description: Get all secret questions for future password reset
       operationId: get-question
       produces:
       - application/json
@@ -57,8 +117,8 @@ paths:
             $ref: '#/definitions/v1.errResponse'
       summary: GetQuestions
       tags:
-      - questions
-  /v1/register:
+      - auth
+  /v1/auth/register:
     post:
       consumes:
       - application/json
@@ -86,5 +146,5 @@ paths:
             $ref: '#/definitions/v1.errResponse'
       summary: Register
       tags:
-      - register
+      - auth
 swagger: "2.0"

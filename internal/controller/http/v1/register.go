@@ -14,11 +14,11 @@ type registerRoutes struct {
 func newRegisterRoutes(handler *gin.RouterGroup, rg usecase.RegisterContract, j usecase.JwtContract) {
 	r := registerRoutes{rg: rg, j: j}
 
-	handler.POST("/register", r.register)
+	handler.POST("/auth/register", r.register)
 }
 
 // @Summary Register
-// @Tags register
+// @Tags auth
 // @Description Register new user
 // @ID register-user
 // @Accept json
@@ -27,7 +27,7 @@ func newRegisterRoutes(handler *gin.RouterGroup, rg usecase.RegisterContract, j 
 // @Success 200 {object} nil
 // @Failure 400 {object} errResponse
 // @Failure 401 {object} errResponse
-// @Router /v1/register [post]
+// @Router /v1/auth/register [post]
 func (r *registerRoutes) register(c *gin.Context) {
 	var req registerRequestDTO
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -49,11 +49,5 @@ func (r *registerRoutes) register(c *gin.Context) {
 		errorResponse(c, http.StatusUnauthorized, "error in format user creds")
 		return
 	}
-	token, err := r.j.GenerateToken(req.Email)
-	if err != nil {
-		errorResponse(c, http.StatusBadRequest, "cannot generate token")
-		return
-	}
-	c.Header("Authorization", "Bearer: "+token)
 	c.JSON(http.StatusOK, nil)
 }

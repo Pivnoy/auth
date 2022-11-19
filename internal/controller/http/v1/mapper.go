@@ -19,3 +19,14 @@ func userRegisterToEntity(dto registerRequestDTO) (entity.User, error) {
 		SecretQuestionAnswer: dto.SecretQuestionAnswer,
 	}, nil
 }
+
+func listQuestionsToDTO(list []entity.SecretQuestion) secretQuestionsResponseDTO {
+	var resList []secretQuestionResponseDTO
+	for _, v := range list {
+		resList = append(resList, secretQuestionResponseDTO{
+			Value: v.ID.String(),
+			Label: v.Question,
+		})
+	}
+	return secretQuestionsResponseDTO{resList}
+}

@@ -1,7 +1,5 @@
 package v1
 
-import "auth_reg/internal/entity"
-
 type registerRequestDTO struct {
 	Email                string `json:"email"`
 	Phone                string `json:"phone"`
@@ -11,11 +9,18 @@ type registerRequestDTO struct {
 }
 
 type secretQuestionsResponseDTO struct {
-	Questions []entity.SecretQuestion `json:"questions"`
+	Questions []secretQuestionResponseDTO `json:"data"`
 }
 
 type loginRequestDTO struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 	Type     string `json:"type"`
+}
+
+// data value label
+
+type secretQuestionResponseDTO struct {
+	Value string `json:"value"`
+	Label string `json:"label"`
 }

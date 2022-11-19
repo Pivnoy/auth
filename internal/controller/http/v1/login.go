@@ -15,20 +15,20 @@ type loginRoutes struct {
 func newLoginRoutes(handler *gin.RouterGroup, u usecase.UserContract, j usecase.JwtContract) {
 	lg := loginRoutes{u: u, j: j}
 
-	handler.POST("/login", lg.login)
+	handler.POST("/auth/login", lg.login)
 }
 
 // @Summary Login
-// @Tags login
+// @Tags auth
 // @Description login
 // @ID login-user
 // @Accept json
 // @Produce json
-// @Param input body loginRequestDTO true "Enter login, password, type"
+// @Param input body loginRequestDTO true "Enter login, password, type ("email"|"phone")"
 // @Success 200 {object} nil
 // @Failure 400 {object} errResponse
 // @Failure 500 {object} errResponse
-// @Router /v1/login [post]
+// @Router /v1/auth/login [post]
 func (l *loginRoutes) login(c *gin.Context) {
 	var lg loginRequestDTO
 	if err := c.ShouldBindJSON(&lg); err != nil {
